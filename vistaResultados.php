@@ -11,7 +11,7 @@
 	<?php include 'Extras/menu.php';
 	if (isset($_SESSION['listaPartidos'])) { ?>
 		<div class="container-contact100">
-			<?php include 'conexionBD.php';
+			<?php include 'conexionBD.php'; 
 
 			$vistaVot = $_SESSION['listaPartidos'];
 			unset($_SESSION['listaPartidos']);
