@@ -17,7 +17,6 @@
 
 
   foreach ($vistaVot as $num => $vot) {
-    echo ("<script>console.log('PHP: " . $_SESSION['Convocatoria'] . "');</script>");
 
     if ($contadorT == 0) { ?>
 
