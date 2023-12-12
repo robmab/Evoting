@@ -18,3 +18,9 @@ Evoting is an electoral voting platform where any registered user can vote in op
 - As long as the poll is **closed**, it will not be possible to vote or see the results.
 - As long as the poll is **open**, it is not possible to add, delete or modify users. In addition, it is not possible to view results or list users.
 - When **the poll closes again****, it will not be possible to register users, or modify users, but **view results** and list users.
+
+## Technologies
+-  SQLInjection
+> Technology made with manual PHP code to prevent hackers from using login inputs to perform unauthorised SQL operations, such as deleting users.
+- Frontend & Backend
+> PHP, Javascript Vanilla, CSS. No framework
