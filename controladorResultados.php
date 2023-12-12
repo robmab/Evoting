@@ -4,51 +4,51 @@ session_start();
 include 'conexionBD.php';
 
 if (isset($_REQUEST['resultado'])) {
-	$denominacion = $_REQUEST['resultado'];
-	$sql1 = "SELECT id FROM convocatoria WHERE denominacion='" . $denominacion . "'";
-	$memi1 = $conexion->query($sql1);
+	$denomination = $_REQUEST['resultado'];
+	$sql = "SELECT id FROM convocatoria WHERE denominacion='" . $denomination . "'";
+	$memory = $conexion->query($sql);
 
-	if ($memi1 && $memi1->num_rows > 0) {
-		$info1 = $memi1->fetch_array();
-		$id = $info1['id'];
+	if ($memory && $memory->num_rows > 0) {
+		$info = $memory->fetch_array();
+		$id = $info['id'];
 	}
 
 	$sql2 = "SELECT count(*) FROM partido";
-	$memi2 = $conexion->query($sql2);
+	$memory2 = $conexion->query($sql2);
 
-	if ($memi2->num_rows > 0) {
-		$info2 = $memi2->fetch_array();
+	if ($memory2->num_rows > 0) {
+		$info2 = $memory2->fetch_array();
 		$num = $info2[0];
 		$num = (int) $num;
 	}
 
 	$cont = 0;
-	$listaVot = array();
+	$votList = array();
 
 	for ($cont2 = 0; $cont < $num; $cont2++) {
-		$sql1 = "SELECT id,nombre,logo FROM partido WHERE id=" . $cont2 . "";
-		$memi1 = $conexion->query($sql1);
+		$sql = "SELECT id,nombre,logo FROM partido WHERE id=" . $cont2 . "";
+		$memory = $conexion->query($sql);
 
-		if ($memi1 && $memi1->num_rows > 0) {
-			$info1 = $memi1->fetch_array();
-			$listaVot[$info1['id']][$info1['logo']] = $info1['nombre'];
+		if ($memory && $memory->num_rows > 0) {
+			$info = $memory->fetch_array();
+			$votList[$info['id']][$info['logo']] = $info['nombre'];
 
 			$cont++;
 		}
 	}
 
-	$listaPartidos = array();
+	$teamList = array();
 
-	foreach ($listaVot as $key => $value1) {
+	foreach ($votList as $key => $value1) {
 		foreach ($value1 as $logo => $value) {
-			$sql1 = "SELECT totalVotos FROM resultado WHERE convocatoria=" . $id . " AND partido=" . $key . " ";
-			$memi1 = $conexion->query($sql1);
+			$sql = "SELECT totalVotos FROM resultado WHERE convocatoria=" . $id . " AND partido=" . $key . " ";
+			$memory = $conexion->query($sql);
 
-			if ($memi1 && $memi1->num_rows > 0) {
-				$info1 = $memi1->fetch_array();
-				$totalVotos = $info1['totalVotos'];
-				$listaPartidos[$logo][0] = $value;
-				$listaPartidos[$logo][1] = $totalVotos;
+			if ($memory && $memory->num_rows > 0) {
+				$info = $memory->fetch_array();
+				$totalVotos = $info['totalVotos'];
+				$teamList[$logo][0] = $value;
+				$teamList[$logo][1] = $totalVotos;
 			}
 		}
 	}
@@ -87,44 +87,44 @@ if (isset($_REQUEST['resultado'])) {
 		return $new_array;
 	}
 
-	$listaPartidos = array_sort($listaPartidos, 1, SORT_DESC);
+	$teamList = array_sort($teamList, 1, SORT_DESC);
 
-	$_SESSION['listaPartidos'] = $listaPartidos;
-	$_SESSION['denomin'] = $denominacion;
+	$_SESSION['listaPartidos'] = $teamList;
+	$_SESSION['denomin'] = $denomination;
 
 	header("Location:vistaResultados.php");
 	exit;
 
 } else {
 	$sql2 = "SELECT count(*) FROM convocatoria";
-	$memi2 = $conexion->query($sql2);
+	$memory2 = $conexion->query($sql2);
 
-	if ($memi2->num_rows > 0) {
-		$info2 = $memi2->fetch_array();
+	if ($memory2->num_rows > 0) {
+		$info2 = $memory2->fetch_array();
 		$num = $info2[0];
 		$num = (int) $num;
 	}
 	$cont = 0;
-	$listaCon = array();
+	$conList = array();
 
 	for ($cont2 = 0; $cont < $num; $cont2++) {
-		$sql1 = "SELECT * FROM convocatoria WHERE id=" . $cont2 . "";
-		$memi1 = $conexion->query($sql1);
+		$sql = "SELECT * FROM convocatoria WHERE id=" . $cont2 . "";
+		$memory = $conexion->query($sql);
 
-		if ($memi1 && $memi1->num_rows > 0) {
-			$info1 = $memi1->fetch_array();
-			$sql1 = "SELECT * FROM resultado WHERE convocatoria=" . $info1['id'] . "";
-			$memi1 = $conexion->query($sql1);
-			if ($memi1 && $memi1->num_rows > 0) {
-				$listaCon[$cont]['denominacion'] = $info1['denominacion'];
-				$listaCon[$cont]['fecha'] = date("d-m-Y", strtotime($info1['fecha']));
-				$listaCon[$cont]['circunscripcion'] = $info1['circunscripcion'];
+		if ($memory && $memory->num_rows > 0) {
+			$info = $memory->fetch_array();
+			$sql = "SELECT * FROM resultado WHERE convocatoria=" . $info['id'] . "";
+			$memory = $conexion->query($sql);
+			if ($memory && $memory->num_rows > 0) {
+				$conList[$cont]['denominacion'] = $info['denominacion'];
+				$conList[$cont]['fecha'] = date("d-m-Y", strtotime($info['fecha']));
+				$conList[$cont]['circunscripcion'] = $info['circunscripcion'];
 			}
 			$cont++;
 		}
 	}
 
-	$_SESSION['resultados'] = $listaCon;
+	$_SESSION['resultados'] = $conList;
 	header("Location:vistaResultados.php");
 	exit;
 } ?>

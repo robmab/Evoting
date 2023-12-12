@@ -116,16 +116,16 @@
 
 		<?php include 'conexionBD.php';
 
-		$sql50 = "SELECT * FROM convocatoria where escrutinio='Abierto' ";
-		$memi50 = $conexion->query($sql50);
+		$sql = "SELECT * FROM convocatoria where escrutinio='Abierto' ";
+		$memory = $conexion->query($sql);
 
-		if ($memi50 && $memi50->num_rows > 0) {
-			$info1 = $memi50->fetch_array(); ?>
+		if ($memory && $memory->num_rows > 0) {
+			$info = $memory->fetch_array(); ?>
 
 			<div class="center">
 				<p style="color: #E20813;"><b>¡La convocatoria
 						<?php
-						echo $info1['denominacion'];
+						echo $info['denominacion'];
 						?> ya esta abierta!
 					</b></p>
 			</div>

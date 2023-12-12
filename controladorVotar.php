@@ -3,24 +3,24 @@
 session_start();
 include 'conexionBD.php';
 
-$contadi = 1;
+$counter = 1;
 
 if (isset($_REQUEST["partido"])) {
-	$partido = $_REQUEST["partido"];
+	$team = $_REQUEST["partido"];
 	unset($_SESSION['vota']);
 	$_SESSION['votante'] = 'Si';
-	$contadi = 0;
+	$counter = 0;
 }
 
-if ($contadi == 1) {
-	$sql3 = "SELECT * FROM votante where nif='" . $_SESSION['user'] . "' ";
-	$memi3 = $conexion->query($sql3);
+if ($counter == 1) {
+	$sql = "SELECT * FROM votante where nif='" . $_SESSION['user'] . "' ";
+	$memory = $conexion->query($sql);
 
-	if ($memi3 && $memi3->num_rows > 0) {
-		$info3 = $memi3->fetch_array();
+	if ($memory && $memory->num_rows > 0) {
+		$info = $memory->fetch_array();
 
-		//_____Comprobar si a votado o no.
-		if ($info3['votante'] == 'No') {
+		//Check if you have voted or not
+		if ($info['votante'] == 'No') {
 			$_SESSION['votante'] = 'No';
 			$_SESSION['vota'] = 1;
 		} else {
@@ -29,18 +29,18 @@ if ($contadi == 1) {
 		}
 	}
 
-	//Nombre convocatoria
-	$sql3 = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where escrutinio='Abierto' ";
-	$memi3 = $conexion->query($sql3);
+	//Name of call for proposals
+	$sql = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where escrutinio='Abierto' ";
+	$memory = $conexion->query($sql);
 
-	if ($memi3 && $memi3->num_rows > 0)
-		$info3 = $memi3->fetch_array();
+	if ($memory && $memory->num_rows > 0)
+		$info = $memory->fetch_array();
 
 	$sql1 = "SELECT escrutinio FROM convocatoria WHERE escrutinio='Abierto'";
-	$memi1 = $conexion->query($sql1);
+	$memory1 = $conexion->query($sql1);
 
-	if ($memi1 && $memi1->num_rows <= 0) {
-		$_SESSION['Convocatoria'] = $info3;
+	if ($memory1 && $memory1->num_rows <= 0) {
+		$_SESSION['Convocatoria'] = $info;
 		$_SESSION['escrutinioAbierto'] = 1;
 	}
 	function array_sort($array, $on, $order = SORT_ASC)
@@ -79,121 +79,121 @@ if ($contadi == 1) {
 	}
 
 	$sql2 = "SELECT count(*) FROM convocatoria";
-	$memi2 = $conexion->query($sql2);
+	$memory2 = $conexion->query($sql2);
 
-	if ($memi2->num_rows > 0) {
-		$info2 = $memi2->fetch_array();
+	if ($memory2->num_rows > 0) {
+		$info2 = $memory2->fetch_array();
 		$num = $info2[0];
 		$num = (int) $num;
 	}
 
 	$cont = 0;
-	$listaCon = array();
+	$conList = array();
 
 	for ($cont2 = 0; $cont < $num; $cont2++) {
 		$sql1 = "SELECT id,fecha FROM convocatoria WHERE id=" . $cont2 . "";
-		$memi1 = $conexion->query($sql1);
+		$memory1 = $conexion->query($sql1);
 
-		if ($memi1 && $memi1->num_rows > 0) {
-			$info1 = $memi1->fetch_array();
+		if ($memory1 && $memory1->num_rows > 0) {
+			$info1 = $memory1->fetch_array();
 			$sql1 = "SELECT * FROM resultado WHERE convocatoria=" . $info1['id'] . "";
-			$memi1 = $conexion->query($sql1);
-			if ($memi1 && $memi1->num_rows <= 0) {
-				$listaCon[$cont]['id'] = $info1['id'];
-				$listaCon[$cont]['fecha'] = $info1['fecha'];
+			$memory1 = $conexion->query($sql1);
+			if ($memory1 && $memory1->num_rows <= 0) {
+				$conList[$cont]['id'] = $info1['id'];
+				$conList[$cont]['fecha'] = $info1['fecha'];
 			}
 			$cont++;
 		}
 	}
 
-	$listaCon = array_sort($listaCon, 'fecha', SORT_ASC);
-	$listaC = array_slice($listaCon, 0, 1);
+	$conList = array_sort($conList, 'fecha', SORT_ASC);
+	$listC = array_slice($conList, 0, 1);
 
-	foreach ($listaC as $value) {
+	foreach ($listC as $value) {
 		foreach ($value as $key => $value) {
 			if ($key == 'id')
 				$solucion = $value;
 		}
 	}
 
-	//Tras todas las opreaciones, aqui se resuelve
-	$sql50 = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where id='" . $solucion . "' ";
-	$memi50 = $conexion->query($sql50);
+	//After all the opreations, here it is resolved
+	$sql3 = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where id='" . $solucion . "' ";
+	$memory3 = $conexion->query($sql3);
 
-	if ($memi50 && $memi50->num_rows > 0) {
-		$info3 = $memi50->fetch_array();
-		$sql3 = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where escrutinio='Abierto' ";
-		$memi3 = $conexion->query($sql3);
+	if ($memory3 && $memory3->num_rows > 0) {
+		$info = $memory3->fetch_array();
+		$sql = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where escrutinio='Abierto' ";
+		$memory = $conexion->query($sql);
 
-		if ($memi3 && $memi3->num_rows > 0) {
-			$info3 = $memi3->fetch_array();
-			$info3['fecha'] = date("d-m-Y", strtotime($info3['fecha']));
+		if ($memory && $memory->num_rows > 0) {
+			$info = $memory->fetch_array();
+			$info['fecha'] = date("d-m-Y", strtotime($info['fecha']));
 		}
 	}
 
-	//_Ahora se recorre los partidos que hay para mostrarlos en tabla.
+	//Now it scrolls through the matches to show them in the table
 	$sql2 = "SELECT count(*) FROM partido";
-	$memi2 = $conexion->query($sql2);
+	$memory2 = $conexion->query($sql2);
 
-	if ($memi2->num_rows > 0) {
-		$info2 = $memi2->fetch_array();
+	if ($memory2->num_rows > 0) {
+		$info2 = $memory2->fetch_array();
 		$num = $info2[0];
 		$num = (int) $num;
 	}
 
 	$cont = 0;
-	$listaVot = array();
+	$votList = array();
 	for ($cont2 = 0; $cont < $num; $cont2++) {
 		$sql1 = "SELECT * FROM partido WHERE ID='" . $cont2 . "'";
-		$memi1 = $conexion->query($sql1);
+		$memory1 = $conexion->query($sql1);
 
-		if ($memi1 && $memi1->num_rows > 0) {
-			$info1 = $memi1->fetch_array();
-			$listaVot[$info1['siglas']] = $info1['logo'];
+		if ($memory1 && $memory1->num_rows > 0) {
+			$info1 = $memory1->fetch_array();
+			$votList[$info1['siglas']] = $info1['logo'];
 
 			$cont++;
 		}
 	}
 
 	session_start();
-	$_SESSION['ARRAYVOTANTES'] = $listaVot;
-	$_SESSION['Convocatoria'] = $info3;
-	$_SESSION['listapart'] = $listaVot;
+	$_SESSION['ARRAYVOTANTES'] = $votList;
+	$_SESSION['Convocatoria'] = $info;
+	$_SESSION['listapart'] = $votList;
 
 	header("Location:vistaVotar.php");
 	exit;
 }
 unset($_SESSION['escrutinioAbierto']);
 
-if ($partido == 'blanco') {
-	$sq1c = "UPDATE votante SET votante='Si' WHERE nif='" . $_SESSION['user'] . "' ";
-	$comprobar = $conexion->query($sq1c);
+if ($team == 'blanco') {
+	$sql4 = "UPDATE votante SET votante='Si' WHERE nif='" . $_SESSION['user'] . "' ";
+	$check = $conexion->query($sql4);
 	$_SESSION['mensajeBD'] = "Voto en blanco, gracias.";
 	$_SESSION['votante'] = 'Si';
 	header("Location:MensajeErrores.php");
 	exit;
 } else {
-	$sql1 = "SELECT votosTotales FROM partido WHERE siglas='" . $partido . "'";
-	$memi1 = $conexion->query($sql1);
+	$sql1 = "SELECT votosTotales FROM partido WHERE siglas='" . $team . "'";
+	$memory1 = $conexion->query($sql1);
 
-	if ($memi1 && $memi1->num_rows > 0)
-		$info1 = $memi1->fetch_array();
+	if ($memory1 && $memory1->num_rows > 0)
+		$info1 = $memory1->fetch_array();
 
-	$votos = $info1['votosTotales'] + 1;
+	$votes = $info1['votosTotales'] + 1;
 	$conexion->autocommit(FALSE);
 
-	$sq1 = "UPDATE partido SET votosTotales='" . $votos . "' WHERE siglas='" . $partido . "' ";
-	$comprobar = $conexion->query($sq1);
+	$sql5 = "UPDATE partido SET votosTotales='" . $votes . "' WHERE siglas='" . $team . "' ";
+	$check = $conexion->query($sql5);
 
 	if ($conexion->affected_rows > 0) {
-		$sq1c = "UPDATE votante SET votante='Si' WHERE nif='" . $_SESSION['user'] . "' ";
-		$comprobar = $conexion->query($sq1c);
+		$sql4 = "UPDATE votante SET votante='Si' WHERE nif='" . $_SESSION['user'] . "' ";
+		$check = $conexion->query($sql4);
 
 		if ($conexion->affected_rows > 0) {
 			$conexion->commit();
 			$conexion->autocommit(TRUE);
 			$_SESSION['votante'] = 'Si';
-			$_SESSION['mensajeBD'] = "Se ha votado a " . $partido . " (total Votos: " . $votos . ")";
+			$_SESSION['mensajeBD'] = "Se ha votado a " . $team . " (total Votos: " . $votes . ")";
 			header("Location:MensajeErrores.php");
 			exit;
 

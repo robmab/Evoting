@@ -8,30 +8,30 @@ if (isset($_SESSION['user']))
 if (isset($_REQUEST["dni"]))
   $dni = $_REQUEST["dni"];
 
-$sql5 = "SELECT apellidos,nombre FROM votante WHERE nif='" . $dni . "'";
-$memi5 = $conexion->query($sql5);
+$sql = "SELECT apellidos,nombre FROM votante WHERE nif='" . $dni . "'";
+$memory = $conexion->query($sql);
 
-if ($memi5 && $memi5->num_rows > 0) {
-  $info5 = $memi5->fetch_array();
-  $sql5 = "SELECT * FROM convocatoria WHERE escrutinio='Abierto'";
-  $memi5 = $conexion->query($sql5);
+if ($memory && $memory->num_rows > 0) {
+  $info = $memory->fetch_array();
+  $sql = "SELECT * FROM convocatoria WHERE escrutinio='Abierto'";
+  $memory = $conexion->query($sql);
 
-  if ($memi5 && $memi5->num_rows > 0) {
+  if ($memory && $memory->num_rows > 0) {
     $_SESSION['mensajeBD'] = "No puedes borrar tu usuario mientras este el escrutinio abierto";
     header("Location:MensajeErrores.php");
     exit;
   }
 }
 
-// Prevenir SQL Inyection
+// Prevent SQL Injection
 $sql1 = "DELETE FROM votante WHERE nif=? AND votante='No'";
-$comprobar = $conexion->prepare($sql1);
-$comprobar->bind_param("s", $Vdni);
+$check = $conexion->prepare($sql1);
+$check->bind_param("s", $Vdni);
 $Vdni = $dni;
-$comprobar->execute();
+$check->execute();
 
 if ($conexion->affected_rows > 0) {
-  $_SESSION['mensajeBD'] = "Se ha borrado a " . $info5['nombre'] . " " . $info5['apellidos'] . "  de la base de datos.";
+  $_SESSION['mensajeBD'] = "Se ha borrado a " . $info['nombre'] . " " . $info['apellidos'] . "  de la base de datos.";
 
   if ($_SESSION['user'] == $dni) {
     unset($_SESSION['user']);

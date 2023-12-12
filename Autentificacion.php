@@ -1,6 +1,6 @@
 <?php
-$contador = 1;
-$contador2 = 1;
+$counter1 = 1;
+$counter2 = 1;
 session_start();
 
 if (isset($_REQUEST["dni"]))
@@ -10,49 +10,49 @@ if (isset($_REQUEST["contraseña"])) {
   $password = $_REQUEST["contraseña"];
   include 'conexionBD.php';
 
-  //Comprobar DNI
-  $sql2 = "SELECT count(*) FROM votante";
-  $memi2 = $conexion->query($sql2);
+  //Check DNI
+  $sql = "SELECT count(*) FROM votante";
+  $memory = $conexion->query($sql);
 
-  if ($memi2->num_rows > 0) {
-    $info2 = $memi2->fetch_array();
-    $num = $info2[0];
+  if ($memory->num_rows > 0) {
+    $info = $memory->fetch_array();
+    $num = $info[0];
     $num = (int) $num;
   }
 
   $cont = 0;
-  $listaVot = array();
+  $votList = array();
 
   for ($cont2 = 0; $cont < $num; $cont2++) {
-    $sql3 = "SELECT nif FROM votante WHERE ID='" . $cont2 . "'";
-    $memi3 = $conexion->query($sql3);
+    $sql2 = "SELECT nif FROM votante WHERE ID='" . $cont2 . "'";
+    $memi3 = $conexion->query($sql2);
 
     if ($memi3 && $memi3->num_rows > 0) {
       $info3 = $memi3->fetch_array();
-      $listaVot[$cont] = $info3['nif'];
+      $votList[$cont] = $info3['nif'];
       $cont++;
     }
   }
 
-  foreach ($listaVot as $nif) {
+  foreach ($votList as $nif) {
     if ($nif == $dni)
-      $contador = 0;
+      $counter1 = 0;
   }
 
-  if ($contador == 1) {
+  if ($counter1 == 1) {
     $_SESSION['errDni'] = 'Este dni no esta registrado.';
     unset($_SESSION['user']);
-    $contador2 = 0;
+    $counter2 = 0;
     header("Location:index.php");
   }
 
-  //Comprobar contraseña y votado. Evitar SQL Inyection ---2 metodo
+  //Check password and voted. Avoid SQL Injection ---2 method
   $sql1 = "SELECT * FROM votante WHERE nif='" . $dni . "'  ";
-  $memi1 = $conexion->query($sql1);
+  $memory3 = $conexion->query($sql1);
 
-  if ($memi1 && $memi1->num_rows > 0) {
-    $info1 = $memi1->fetch_array();
-    $contraseñaDec = base64_decode($info1['password']);
+  if ($memory3 && $memory3->num_rows > 0) {
+    $info1 = $memory3->fetch_array();
+    $decPassword = base64_decode($info1['password']);
     $_SESSION['domicilio'] = $info1['domicilio'];
     $_SESSION['fechaNac'] = $info1['fechaNac'];
     $_SESSION['user'] = $info1['nif'];
@@ -62,18 +62,18 @@ if (isset($_REQUEST["contraseña"])) {
     $_SESSION['rol'] = $info1['rol'];
     $_SESSION['password'] = $info1['password'];
 
-    //Comprueba si la contraseña coincide con la puesta
-    if ($contraseñaDec != $password) {
+    //Check if the password matches the one you have set
+    if ($decPassword != $password) {
       $_SESSION['err'] = 'Contraseña incorrecta.';
       unset($_SESSION['user']);
-      $contador2 = 0;
+      $counter2 = 0;
       header("Location:index.php");
     }
   }
 }
 
-//Redirección
-if ($contador2 == 1) {
+//Redirection
+if ($counter2 == 1) {
   if ($_SESSION['modo'] == 'borrar')
     header("Location:vistaBorrarVotantes.php");
   elseif ($_SESSION['modo'] == 'modificar')

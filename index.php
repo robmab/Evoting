@@ -21,13 +21,13 @@
     }
   }
 
-  //Entrando desde el menu directamente
+  //Entering from the menu directly
   if ((isset($_SESSION['user'])) && ($count == 1)) {
     $_SESSION['sesionIniciada'] = '¡Ya estas logeado!';
     header("Location:menuEntrada.php");
   }
 
-  //Menu directo
+  //Direct menu
   include 'Extras/css.php'; ?>
 
   <style>

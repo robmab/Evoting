@@ -8,41 +8,41 @@ if (isset($_REQUEST["cancelar"])) {
 	exit;
 }
 
-//Comprobaciones si vota y escrutinio
-$sql5 = "SELECT * FROM convocatoria WHERE escrutinio='Abierto'";
-$memi5 = $conexion->query($sql5);
+//Voting and canvassing checks
+$sql = "SELECT * FROM convocatoria WHERE escrutinio='Abierto'";
+$memory = $conexion->query($sql);
 
-if ($memi5 && $memi5->num_rows > 0) {
+if ($memory && $memory->num_rows > 0) {
 	$_SESSION['mensajeBD'] = "No puedes modificar tu usuario mientras este el escrutinio abierto ";
 	header("Location:MensajeErrores.php");
 	exit;
 }
 
-$sql5 = "SELECT * FROM votante WHERE votante='Si' AND nif='" . $_SESSION['user'] . "'";
-$memi5 = $conexion->query($sql5);
+$sql = "SELECT * FROM votante WHERE votante='Si' AND nif='" . $_SESSION['user'] . "'";
+$memory = $conexion->query($sql);
 
-if ($memi5 && $memi5->num_rows > 0) {
+if ($memory && $memory->num_rows > 0) {
 	$_SESSION['mensajeBD'] = "No puedes modificar tu usuario si ya has votado ";
 	header("Location:MensajeErrores.php");
 	exit;
 }
 
-//Comprobaciones si vota y escrutinio
-$countador = 1;
+//Voting and canvassing checks
+$counter = 1;
 $cont = 1;
 
-//summit comprobacion
+//Summit check
 if (isset($_REQUEST['probar']))
-	$countador = 0;
+	$counter = 0;
 
-//Recoger datos para el formulario
-if ($countador == 1) {
+//Collect data for the form
+if ($counter == 1) {
 	$sql1 = "SELECT * FROM votante WHERE nif='" . $_SESSION['user'] . "'";
-	$memi1 = $conexion->query($sql1);
+	$memory1 = $conexion->query($sql1);
 
-	if ($memi1 && $memi1->num_rows > 0) {
-		$info1 = $memi1->fetch_array();
-		$_SESSION['datosVotante'] = $info1;
+	if ($memory1 && $memory1->num_rows > 0) {
+		$info = $memory1->fetch_array();
+		$_SESSION['datosVotante'] = $info;
 		$_SESSION['CHECK'] = 1;
 		$nif = $_SESSION['datosVotante']['nif'];
 		header("Location:vistaModificarVotantes.php");
@@ -50,28 +50,28 @@ if ($countador == 1) {
 	}
 }
 
-//Request de los datos
+//Data request
 if (isset($_REQUEST["contraseñaA"]) && ($_REQUEST['contraseñaA'] != '')) {
-	$contraseñaA = $_REQUEST["contraseñaA"];
+	$passwordA = $_REQUEST["contraseñaA"];
 
 	if (isset($_REQUEST['contraseñaN']) && ($_REQUEST['contraseñaN'] != '')) {
-		$contraseñaN = $_REQUEST["contraseñaN"];
+		$passwordN = $_REQUEST["contraseñaN"];
 
 		if (isset($_REQUEST['contraseñaN2']) && ($_REQUEST['contraseñaN2'] != '')) {
-			$contraseñaN2 = $_REQUEST["contraseñaN2"];
-			$contraseñaDec = base64_decode($_SESSION['password']);
+			$passwordN2 = $_REQUEST["contraseñaN2"];
+			$decPassword = base64_decode($_SESSION['password']);
 
-			if ($contraseñaA != $contraseñaDec) {
+			if ($passwordA != $decPassword) {
 				$cont = 0;
 				$_SESSION['errCont'] = 'No coincide la contraseña actual';
 				header("Location:vistaModificarVotantes.php");
 				exit;
 			}
 			if ($cont = 1) {
-				$contraseñaN2enc = base64_encode($contraseñaN2);
-				$dni10 = $_SESSION['user'];
-				$sq1 = "UPDATE votante SET password='" . $contraseñaN2enc . "' WHERE nif='" . $_SESSION['user'] . "'";
-				$comprobar = $conexion->query($sq1);
+				$encPasswordN2 = base64_encode($passwordN2);
+				$dni = $_SESSION['user'];
+				$sql2 = "UPDATE votante SET password='" . $encPasswordN2 . "' WHERE nif='" . $_SESSION['user'] . "'";
+				$check = $conexion->query($sql2);
 
 				if ($conexion->affected_rows > 0) {
 					$_SESSION['comprobacionContraseña'] = "La contraseña ha sido modificada correctamente.";
@@ -84,33 +84,33 @@ if (isset($_REQUEST["contraseñaA"]) && ($_REQUEST['contraseñaA'] != '')) {
 }
 
 if (isset($_REQUEST['nombre2']) && ($_REQUEST['nombre2'] != '')) {
-	$nombre = $_REQUEST["nombre2"];
-	$nombre = ucwords($nombre);
-	$sq = "UPDATE votante SET nombre='" . $nombre . "' WHERE nif='" . $_SESSION['user'] . "'";
-	$comprobar = $conexion->query($sq);
+	$name = $_REQUEST["nombre2"];
+	$name = ucwords($name);
+	$sq = "UPDATE votante SET nombre='" . $name . "' WHERE nif='" . $_SESSION['user'] . "'";
+	$check = $conexion->query($sq);
 
 	if ($conexion->affected_rows > 0) {
-		$_SESSION['datosVotante']['nombre'] = $nombre;
+		$_SESSION['datosVotante']['nombre'] = $name;
 		$cont = 0;
 	}
 }
 
 if (isset($_REQUEST['apellidos2']) && ($_REQUEST['apellidos2'] != '')) {
-	$apellidos = $_REQUEST["apellidos2"];
-	$apellidos = ucwords($apellidos);
-	$sq = "UPDATE votante SET apellidos='" . $apellidos . "' WHERE nif='" . $_SESSION['user'] . "'";
-	$comprobar = $conexion->query($sq);
+	$lastname = $_REQUEST["apellidos2"];
+	$lastname = ucwords($lastname);
+	$sq = "UPDATE votante SET apellidos='" . $lastname . "' WHERE nif='" . $_SESSION['user'] . "'";
+	$check = $conexion->query($sq);
 
 	if ($conexion->affected_rows > 0) {
-		$_SESSION['datosVotante']['apellidos'] = $apellidos;
+		$_SESSION['datosVotante']['apellidos'] = $lastname;
 		$cont = 0;
 	}
 }
 
 if (isset($_REQUEST['fechaN2']) && ($_REQUEST['fechaN2'] != '')) {
-	$fechaN = $_REQUEST["fechaN2"];
-	$sq = "UPDATE votante SET fechaNac='" . $fechaN . "' WHERE nif='" . $_SESSION['user'] . "'";
-	$comprobar = $conexion->query($sq);
+	$dateN = $_REQUEST["fechaN2"];
+	$sq = "UPDATE votante SET fechaNac='" . $dateN . "' WHERE nif='" . $_SESSION['user'] . "'";
+	$check = $conexion->query($sq);
 
 	if ($conexion->affected_rows > 0)
 		$cont = 0;
@@ -118,19 +118,19 @@ if (isset($_REQUEST['fechaN2']) && ($_REQUEST['fechaN2'] != '')) {
 
 
 if (isset($_REQUEST['domicilio2']) && ($_REQUEST['domicilio2'] != '')) {
-	$domicilio = $_REQUEST["domicilio2"];
-	$domicilio = ucwords($domicilio);
-	$sq = "UPDATE votante SET domicilio='" . $domicilio . "' WHERE nif='" . $_SESSION['user'] . "'";
-	$comprobar = $conexion->query($sq);
+	$address = $_REQUEST["domicilio2"];
+	$address = ucwords($address);
+	$sq = "UPDATE votante SET domicilio='" . $address . "' WHERE nif='" . $_SESSION['user'] . "'";
+	$check = $conexion->query($sq);
 
 	if ($conexion->affected_rows > 0)
 		$cont = 0;
 }
 
 if (isset($_REQUEST['rol2']) && ($_REQUEST['rol2'] != '')) {
-	$rol = $_REQUEST["rol2"];
-	$sq = "UPDATE votante SET rol='" . $rol . "' WHERE nif='" . $_SESSION['user'] . "'";
-	$comprobar = $conexion->query($sq);
+	$role = $_REQUEST["rol2"];
+	$sq = "UPDATE votante SET rol='" . $role . "' WHERE nif='" . $_SESSION['user'] . "'";
+	$check = $conexion->query($sq);
 
 	if ($conexion->affected_rows > 0)
 		$cont = 0;
@@ -138,25 +138,24 @@ if (isset($_REQUEST['rol2']) && ($_REQUEST['rol2'] != '')) {
 }
 
 if (isset($_REQUEST['votado2']) && ($_REQUEST['votado2'] != '')) {
-	$votado = $_REQUEST["votado2"];
-	$sq = "UPDATE votante SET votante='" . $votado . "' WHERE nif='" . $_SESSION['user'] . "'";
-	$comprobar = $conexion->query($sq);
+	$voted = $_REQUEST["votado2"];
+	$sq = "UPDATE votante SET votante='" . $voted . "' WHERE nif='" . $_SESSION['user'] . "'";
+	$check = $conexion->query($sq);
 
 	if ($conexion->affected_rows > 0)
 		$cont = 0;
 }
 
-//Request de los datos
-//Si no se modifico un dato o si
+//If a piece of data has not been modified, or if
 if ($cont == 0) {
 	unset($_SESSION['CHECK']);
 	$sql1 = "SELECT * FROM votante WHERE nif='" . $_SESSION['user'] . "'";
-	$memi1 = $conexion->query($sql1);
+	$memory1 = $conexion->query($sql1);
 
-	if ($memi1 && $memi1->num_rows > 0)
-		$info1 = $memi1->fetch_array();
+	if ($memory1 && $memory1->num_rows > 0)
+		$info = $memory1->fetch_array();
 
-	$_SESSION['visionVot'] = $info1;
+	$_SESSION['visionVot'] = $info;
 	$_SESSION['VAL'] = 1;
 	header("Location:vistaModificarVotantes.php");
 	exit;

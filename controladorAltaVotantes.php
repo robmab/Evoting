@@ -2,19 +2,19 @@
 session_start();
 include 'conexionBD.php';
 
-$sql5 = "SELECT * FROM convocatoria WHERE escrutinio='Abierto'";
-$memi5 = $conexion->query($sql5);
+$sql = "SELECT * FROM convocatoria WHERE escrutinio='Abierto'";
+$memory = $conexion->query($sql);
 
-if ($memi5 && $memi5->num_rows > 0) {
+if ($memory && $memory->num_rows > 0) {
   $_SESSION['mensajeBD'] = "No puedes darte de alta mientras este el escrutinio abierto";
   header("Location:MensajeErrores.php");
   exit;
 }
 
-$sql5 = "SELECT * FROM votante WHERE votante='Si' AND nif='" . $_SESSION['user'] . "'";
-$memi5 = $conexion->query($sql5);
+$sql = "SELECT * FROM votante WHERE votante='Si' AND nif='" . $_SESSION['user'] . "'";
+$memory = $conexion->query($sql);
 
-if ($memi5 && $memi5->num_rows > 0) {
+if ($memory && $memory->num_rows > 0) {
   $_SESSION['mensajeBD'] = "No puedes modificar tu usuario si ya has votado ";
   header("Location:MensajeErrores.php");
   exit;
@@ -24,30 +24,30 @@ if (isset($_REQUEST["dni"]))
   $dni = $_REQUEST["dni"];
 
 if (isset($_REQUEST['nombre'])) {
-  $nombre = $_REQUEST["nombre"];
-  $nombre = ucwords($nombre);
+  $name = $_REQUEST["nombre"];
+  $name = ucwords($name);
 }
 
 if (isset($_REQUEST['apellidos'])) {
-  $apellidos = $_REQUEST["apellidos"];
-  $apellidos = ucwords($apellidos);
+  $lastname = $_REQUEST["apellidos"];
+  $lastname = ucwords($lastname);
 }
 
 if (isset($_REQUEST['fechaN']))
-  $fechaN = $_REQUEST["fechaN"];
+  $dateN = $_REQUEST["fechaN"];
 
 if (isset($_REQUEST['domicilio'])) {
-  $domicilio = $_REQUEST["domicilio"];
-  $domicilio = ucwords($domicilio);
+  $address = $_REQUEST["domicilio"];
+  $address = ucwords($address);
 }
 if (isset($_REQUEST['contraseña'])) {
-  $contraseña = $_REQUEST["contraseña"];
-  $contraseñaEnc = base64_encode($contraseña);
+  $password = $_REQUEST["contraseña"];
+  $encPassword = base64_encode($password);
 
   if (isset($_REQUEST['contraseña2'])) {
-    $contraseña2 = $_REQUEST["contraseña2"];
+    $password2 = $_REQUEST["contraseña2"];
 
-    if ($contraseña2 != $contraseña) {
+    if ($password2 != $password) {
       $_SESSION['dosPassw'] = 'No coincide la contraseña.';
       header("Location:vistaAltaVotante.php");
       exit;
@@ -55,11 +55,11 @@ if (isset($_REQUEST['contraseña'])) {
   }
 }
 
-$sq1 = "INSERT INTO votante(nif,domicilio,apellidos,fechaNac,password,rol,votante,nombre)   VALUES('" . $dni . "','" . $domicilio . "','" . $apellidos . "','" . $fechaN . "','" . $contraseñaEnc . "','Votante','No','" . $nombre . "')";
-$comprobar = $conexion->query($sq1);
+$sql2 = "INSERT INTO votante(nif,domicilio,apellidos,fechaNac,password,rol,votante,nombre)   VALUES('" . $dni . "','" . $address . "','" . $lastname . "','" . $dateN . "','" . $encPassword . "','Votante','No','" . $name . "')";
+$check = $conexion->query($sql2);
 
 if ($conexion->affected_rows > 0) {
-  $_SESSION['mensajeBD'] = "Se ha añadido a " . $nombre . " " . $apellidos . "  a la base de datos.";
+  $_SESSION['mensajeBD'] = "Se ha añadido a " . $name . " " . $lastname . "  a la base de datos.";
   header("Location:MensajeErrores.php");
 } else {
   $_SESSION['mensajeBD'] = "Este votante ya se ha dado de alta.";

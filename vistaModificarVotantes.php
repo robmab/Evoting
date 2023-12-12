@@ -11,7 +11,7 @@
 
   <?php include 'Extras/menu.php';
 
-  //Formulario
+  //Formulary
   if (isset($_SESSION['CHECK'])) { ?>
 
     <script>

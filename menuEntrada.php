@@ -10,7 +10,7 @@
 <body>
 	<?php include 'Extras/menu.php';
 
-	//Comprobar sesion abierta / mostrarla
+	//Check open session / show it
 	if (isset($_SESSION['user'])) { ?>
 		<div class="container-contact100">
 			<div class="table100 ver1 m-b-110">

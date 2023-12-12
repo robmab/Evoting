@@ -11,16 +11,16 @@
 	<?php include 'Extras/menu.php';
 	if (isset($_SESSION['listaPartidos'])) { ?>
 		<div class="container-contact100">
-			<?php include 'conexionBD.php'; 
+			<?php include 'conexionBD.php';
 
-			$vistaVot = $_SESSION['listaPartidos'];
+			$votView = $_SESSION['listaPartidos'];
 			unset($_SESSION['listaPartidos']);
-			$contadorT = 0;
+			$counterT = 0;
 			$cont = 1;
 
-			foreach ($vistaVot as $logo => $value1) {
-				foreach ($value1 as $indice => $value) {
-					if ($contadorT == 0) { ?>
+			foreach ($votView as $logo => $value1) {
+				foreach ($value1 as $index => $value) {
+					if ($counterT == 0) { ?>
 
 						<div class="table100 ver1 m-b-110">
 							<br>
@@ -45,7 +45,7 @@
 									<tbody>
 
 									<?php }
-					if ($indice == 0) { ?>
+					if ($index == 0) { ?>
 										<tr class="row100">
 											<td class="column100 column1" data-column="column1">
 												<?php if ($cont == 1) { ?>
@@ -76,7 +76,7 @@
 											</td>
 
 										<?php }
-					if ($indice == 1) { ?>
+					if ($index == 1) { ?>
 
 											<td class="column100 column2" data-column="column2"><b>
 													<?php echo $value ?>
@@ -84,7 +84,7 @@
 											</td>
 										</tr>
 									<?php }
-					$contadorT = 1;
+					$counterT = 1;
 				}
 			} ?>
 						</tbody>

@@ -156,15 +156,6 @@
       padding-left: 15px;
    }
 
-
-
-
-
-
-
-
-
-
    body {
       background: #333 url(bg.jpg) repeat top left;
       font-family: Arial;

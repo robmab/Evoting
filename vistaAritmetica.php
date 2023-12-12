@@ -11,11 +11,11 @@
 <div class="container-contact100">
 
 	<?php include 'conexionBD.php';
-	$vistaPar = $_SESSION['ARRAYPARTIDOS'];
-	$contadorT = 0;
+	$parView = $_SESSION['ARRAYPARTIDOS'];
+	$counterT = 0;
 
-	foreach ($vistaPar as $num => $vot) {
-		if ($contadorT == 0) { ?>
+	foreach ($parView as $num => $vot) {
+		if ($counterT == 0) { ?>
 			<div class="table100 ver1 m-b-110">
 				<br>
 				<h1> Listado Partidos +
@@ -35,20 +35,20 @@
 
 							<tr class="row100">
 								<td class="column100 column1" data-column="column1">
-									<?php echo $vistaPar[$num]['nombre'] ?>
+									<?php echo $parView[$num]['nombre'] ?>
 								</td>
 								<td class="column100 column2" data-column="column2">
-									<?php echo $vistaPar[$num]['siglas'] ?>
+									<?php echo $parView[$num]['siglas'] ?>
 								</td>
 								<td class="column100 column4" data-column="column4"><img src="<?php
-								echo $vistaPar[$num]['logo'] ?> " alt="Logo Partido" style="width:100px;height:100px;">
+								echo $parView[$num]['logo'] ?> " alt="Logo Partido" style="width:100px;height:100px;">
 								</td>
 
 								<td class="column100 column5" data-column="column5">
-									<?php echo $vistaPar[$num]['votosTotales'] ?>
+									<?php echo $parView[$num]['votosTotales'] ?>
 								</td>
 								<?php
-								$contadorT = 1;
+								$counterT = 1;
 	} ?>
 						</tr>
 						<?php if (isset($_SESSION['comprobarEscrutinio']))

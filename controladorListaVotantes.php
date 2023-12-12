@@ -1,35 +1,35 @@
 <?php
 include 'conexionBD.php';
 
-$sql2 = "SELECT count(*) FROM votante";
-$memi2 = $conexion->query($sql2);
+$sql = "SELECT count(*) FROM votante";
+$memory = $conexion->query($sql);
 
-if ($memi2->num_rows > 0) {
-  $info2 = $memi2->fetch_array();
-  $num = $info2[0];
+if ($memory->num_rows > 0) {
+  $info = $memory->fetch_array();
+  $num = $info[0];
   $num = (int) $num;
 }
 
 $cont = 0;
-$listaVot = array();
+$votList = array();
 
 for ($cont2 = 0; $cont < $num; $cont2++) {
   $sql1 = "SELECT nif,domicilio,apellidos,fechaNac,rol,votante,nombre FROM votante WHERE ID='" . $cont2 . "'";
-  $memi1 = $conexion->query($sql1);
-  if ($memi1 && $memi1->num_rows > 0) {
-    $info1 = $memi1->fetch_array();
-    $listaVot[$cont]['nombre'] = $info1['nombre'];
-    $listaVot[$cont]['apellidos'] = $info1['apellidos'];
-    $listaVot[$cont]['fechaNac'] = $info1['fechaNac'];
-    $listaVot[$cont]['domicilio'] = $info1['domicilio'];
-    $listaVot[$cont]['nif'] = $info1['nif'];
-    $listaVot[$cont]['votante'] = $info1['votante'];
+  $memory1 = $conexion->query($sql1);
+  if ($memory1 && $memory1->num_rows > 0) {
+    $info1 = $memory1->fetch_array();
+    $votList[$cont]['nombre'] = $info1['nombre'];
+    $votList[$cont]['apellidos'] = $info1['apellidos'];
+    $votList[$cont]['fechaNac'] = $info1['fechaNac'];
+    $votList[$cont]['domicilio'] = $info1['domicilio'];
+    $votList[$cont]['nif'] = $info1['nif'];
+    $votList[$cont]['votante'] = $info1['votante'];
 
     $cont++;
   }
 }
 
-//Ordenado por apellido.
+//Sorted by last name
 function array_sort($array, $on, $order = SORT_ASC)
 {
   $new_array = array();
@@ -64,53 +64,53 @@ function array_sort($array, $on, $order = SORT_ASC)
   return $new_array;
 }
 
-$listaVot = array_sort($listaVot, 'apellidos', SORT_ASC);
+$votList = array_sort($votList, 'apellidos', SORT_ASC);
 
-// Nombre Convocatoria
-$sql2 = "SELECT count(*) FROM convocatoria";
-$memi2 = $conexion->query($sql2);
+// Name Call
+$sql = "SELECT count(*) FROM convocatoria";
+$memory = $conexion->query($sql);
 
-if ($memi2->num_rows > 0) {
-  $info2 = $memi2->fetch_array();
-  $num = $info2[0];
+if ($memory->num_rows > 0) {
+  $info = $memory->fetch_array();
+  $num = $info[0];
   $num = (int) $num;
 }
 
 $cont = 0;
-$listaCon = array();
+$conList = array();
 
 for ($cont2 = 0; $cont < $num; $cont2++) {
   $sql1 = "SELECT id,fecha FROM convocatoria WHERE id=" . $cont2 . "";
-  $memi1 = $conexion->query($sql1);
+  $memory1 = $conexion->query($sql1);
 
-  if ($memi1 && $memi1->num_rows > 0) {
-    $info1 = $memi1->fetch_array();
+  if ($memory1 && $memory1->num_rows > 0) {
+    $info1 = $memory1->fetch_array();
     $sql1 = "SELECT * FROM resultado WHERE convocatoria=" . $info1['id'] . "";
-    $memi1 = $conexion->query($sql1);
+    $memory1 = $conexion->query($sql1);
 
-    if ($memi1 && $memi1->num_rows <= 0) {
-      $listaCon[$cont]['id'] = $info1['id'];
-      $listaCon[$cont]['fecha'] = $info1['fecha'];
+    if ($memory1 && $memory1->num_rows <= 0) {
+      $conList[$cont]['id'] = $info1['id'];
+      $conList[$cont]['fecha'] = $info1['fecha'];
     }
     $cont++;
   }
 }
 
-$listaCon = array_sort($listaCon, 'fecha', SORT_ASC);
-$listaC = array_slice($listaCon, 0, 1);
+$conList = array_sort($conList, 'fecha', SORT_ASC);
+$listC = array_slice($conList, 0, 1);
 
-foreach ($listaC as $value) {
+foreach ($listC as $value) {
   foreach ($value as $key => $value) {
     if ($key == 'id')
       $solucion = $value;
   }
 }
 
-$sql50 = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where id='" . $solucion . "' ";
-$memi50 = $conexion->query($sql50);
+$sql2 = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where id='" . $solucion . "' ";
+$memory2 = $conexion->query($sql2);
 
-if ($memi50 && $memi50->num_rows > 0) {
-  $info3 = $memi50->fetch_array();
+if ($memory2 && $memory2->num_rows > 0) {
+  $info3 = $memory2->fetch_array();
   $info3['fecha'] = date("d-m-Y", strtotime($info3['fecha']));
   $sql3 = "SELECT denominacion,circunscripcion,fecha FROM convocatoria where escrutinio='Abierto' ";
   $memi3 = $conexion->query($sql3);
@@ -122,7 +122,7 @@ if ($memi50 && $memi50->num_rows > 0) {
 }
 
 session_start();
-$_SESSION['ARRAYVOTANTES'] = $listaVot;
+$_SESSION['ARRAYVOTANTES'] = $votList;
 $_SESSION['Convocatoria'] = $info3;
 
 header("Location:vistaListaVotantes.php");

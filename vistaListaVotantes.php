@@ -12,13 +12,13 @@
 <div class="container-contact100">
 
   <?php include 'conexionBD.php';
-  $vistaVot = $_SESSION['ARRAYVOTANTES'];
-  $contadorT = 0;
+  $votView = $_SESSION['ARRAYVOTANTES'];
+  $counterT = 0;
 
 
-  foreach ($vistaVot as $num => $vot) {
+  foreach ($votView as $num => $vot) {
 
-    if ($contadorT == 0) { ?>
+    if ($counterT == 0) { ?>
 
       <div class="table100 ver1 m-b-110">
         <br>
@@ -64,25 +64,25 @@
 
             <tr class="row100">
               <td class="column100 column1" data-column="column1">
-                <?php echo $vistaVot[$num]['nombre'] ?>
+                <?php echo $votView[$num]['nombre'] ?>
               </td>
               <td class="column100 column2" data-column="column2">
-                <?php echo $vistaVot[$num]['apellidos'] ?>
+                <?php echo $votView[$num]['apellidos'] ?>
               </td>
               <td class="column100 column3" data-column="column3">
-                <?php echo $vistaVot[$num]['fechaNac'] ?>
+                <?php echo $votView[$num]['fechaNac'] ?>
               </td>
               <td class="column100 column4" data-column="column4">
-                <?php echo $vistaVot[$num]['domicilio'] ?>
+                <?php echo $votView[$num]['domicilio'] ?>
               </td>
               <td class="column100 column5" data-column="column5">
-                <?php echo $vistaVot[$num]['nif'] ?>
+                <?php echo $votView[$num]['nif'] ?>
               </td>
               <td class="column100 column6" data-column="column6">
-                <?php echo $vistaVot[$num]['votante'] ?>
+                <?php echo $votView[$num]['votante'] ?>
               </td>
 
-              <?php $contadorT = 1; ?>
+              <?php $counterT = 1; ?>
             </tr>
 
           <?php } ?>
