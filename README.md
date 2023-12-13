@@ -11,7 +11,7 @@ Evoting is an electoral voting platform where any registered user can vote in op
 - View of the entire **list of political parties**, as well as their information.
 - View to **vote**, but only when the poll is opened by an administrator.
 - Admin view to **open or close the last call** created by GM.
-- View of the **list of results of all calls**** sorted by date and points.
+- View of the **list of results of all call*** sorted by date and points.
 - View of political parties that fulfil that their **total votes are greater than the total number of votes cast in the election divided by the number of participating political parties**.
 
 ## Control of permissions
